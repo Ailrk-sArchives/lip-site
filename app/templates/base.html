@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    {% block head %}
+    <title>{% block title %}{% endblock %} - LIP</title>
+    <link rel="stylesheet" type=text/css href="{{ url_for('static', filename='base.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=0">
+    {% endblock %}
+  </head>
+  <body>
+    <div class="container"></div>
+      <div class="header">
+        <a href="" class="logo">LIP</a>
+        <input class="nav-btn" type="checkbox" id="nav-btn" />
+        <label class="nav-icon" for="nav-btn">
+          <span class="navicon"></span>
+        </label>
+        <ul class="nav">
+          <li><a>About</a></li>
+          <li><a>Login</a></li>
+        </ul>
+      </div>
+      <div class="content-nav">
+      </div>
+      <div class="content">
+        {% block content %}
+        {% endblock %}
+      </div>
+    </div>
+  </body>
+</html>

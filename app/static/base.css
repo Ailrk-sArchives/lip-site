@@ -1,0 +1,148 @@
+body {
+  margin: 0;
+  font-family: Helvetica, sans-serif;
+  background-color: #f4f4f4;
+}
+
+a {
+  color: #000;
+}
+
+/* header */
+
+.header {
+  background-color: #fff;
+  box-shadow: 1px 1px 4px 0 rgba(0,0,0,.1);
+  position: fixed;
+  width: 100%;
+  z-index: 3;
+}
+
+.header ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow: hidden;
+  background-color: #fff;
+}
+
+.header li a {
+  display: block;
+  padding: 20px 20px;
+  border-right: 1px solid #f4f4f4;
+  text-decoration: none;
+}
+
+.header li a:hover,
+.header .nav-btn:hover {
+  background-color: #f4f4f4;
+}
+
+.header li {
+  float: right;
+}
+
+.header .logo {
+  display: block;
+  float: left;
+  font-size: 2em;
+  padding: 10px 20px;
+  text-decoration: none;
+}
+
+/* nav */
+
+.header .nav {
+  clear: none;
+  max-height: none;
+  transition: max-height .2s ease-out;
+}
+
+/* nav icon */
+
+.header .nav-icon {
+  cursor: pointer;
+  float: right;
+  padding: 28px 20px;
+  position: relative;
+  user-select: none;
+}
+
+.header .nav-icon .navicon {
+  background: #333;
+  display: block;
+  height: 2px;
+  position: relative;
+  transition: background .2s ease-out;
+  width: 18px;
+}
+
+.header .nav-icon .navicon:before,
+.header .nav-icon .navicon:after {
+  background: #333;
+  content: '';
+  display: block;
+  height: 100%;
+  position: absolute;
+  transition: all .2s ease-out;
+  width: 100%;
+}
+
+.header .nav-icon .navicon:before {
+  top: 5px;
+}
+
+.header .nav-icon .navicon:after {
+  top: -5px;
+}
+
+/* nav btn */
+
+.header .nav-btn {
+  display: none;
+}
+
+.header .nav-btn:checked ~ .nav {
+  max-height: 240px;
+}
+
+.header .nav-btn:checked ~ .nav-icon .navicon {
+  background: transparent;
+}
+
+.header .nav-btn:checked ~ .nav-icon .navicon:before {
+  transform: rotate(-45deg);
+}
+
+.header .nav-btn:checked ~ .nav-icon .navicon:after {
+  transform: rotate(45deg);
+}
+
+.header .nav-btn:checked ~ .nav-icon:not(.steps) .navicon:before,
+.header .nav-btn:checked ~ .nav-icon:not(.steps) .navicon:after {
+  top: 0;
+}
+
+/* content navigation panel */
+
+.content-nav {
+    float: right;
+    position: relative;
+    background: white;
+    width: 6em;
+    height: 200px;
+    z-index: 1;
+}
+
+/* 48em = 768px */
+
+@media (min-width: 48em) {
+  .header li a {
+    padding: 20px 30px;
+  }
+  .header .nav {
+    clear: none;
+    float: right;
+    max-height: none;
+  }
+}
