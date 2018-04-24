@@ -1,13 +1,10 @@
+from flask import  Flask
+from .config import Config
+from flask_sqlalchemy import SQLAlchemy
 
-from flask import Flask, render_template
+app = Flask(__name__)
+app.config.from_object(Config)
 
-app = Flask(__name__, template_folder="./templates")
+db = SQLAlchemy(app)
 
-@app.route("/")
-def index():
-    return render_template("base.html")
-
-
-
-
-
+from app import views, models
