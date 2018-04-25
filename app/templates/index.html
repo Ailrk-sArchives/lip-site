@@ -1,4 +1,12 @@
-{% extends "layout.html" %} {% block head %} {{super()}}
+{% extends "layout.html" %}
+
+{% block title %}
+Home
+{{super()}}
+{% endblock %}
+
+{% block head %}
+{{super()}}
 <style>
   .card-list {
     list-style-type: none;
@@ -31,9 +39,16 @@
   .card h1 {
     margin: 0
   }
-</style>
 
-{% endblock %} {% block page_content %}
+  @media (min-width: 992px) {
+    .card {
+      max-width: 900px;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block page_content %}
 <ul class="card-list">
   {% for article in articles%}
   <li>
@@ -41,7 +56,7 @@
       <div class="page-header">
         <h1>{{article.title}}</h1>
       </div>
-      <p>{{article.content}}</p>
+      <p class="article-text">{{article.content}}</p>
     </div>
   </li>
   {% endfor %}
