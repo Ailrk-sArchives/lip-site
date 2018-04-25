@@ -54,23 +54,16 @@ def signup():
             return redirect(url_for('index'))
     return render_template('signup.html', form=form)
 
-@app.route('/article/<id>')
+@app.route('/article/<int:id>')
 def show_article(id):
-    article = Article.get_article(int(id))
+    article = Article.get_article(id)
     return render_template('article.html', article=article)
 
 @app.route('/new')
 def new():
     return render_template('editor.html')
 
-
-
-
-
-
-
-
-
-
-
+@app.route('/edit')
+def edit():
+    return render_template('editor.html')
 
