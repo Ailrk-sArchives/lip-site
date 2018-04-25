@@ -1,6 +1,7 @@
 from app import app
 from flask import render_template, session, redirect, url_for
 from .forms import LoginForm
+from .models import *
 
 @app.route("/index")
 @app.route("/")
