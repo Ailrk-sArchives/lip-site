@@ -6,7 +6,7 @@ import hashlib
 
 @app.route("/index", methods=['GET', 'POST'])
 @app.route("/", methods=['GET', 'POST'])
-def index(): 
+def index():
     articles = Article.get_many_articles()
 
     """ login and signup """
