@@ -1,15 +1,159 @@
+{% extends "bootstrap/base.html" %} {% block title %}This is an example page{% endblock %} {% block head %} {{super()}}
+<style>
+    html {
+        height: 100%;
+    }
 
-{% extends "bootstrap/base.html" %}
+    body {
+        background: #f4f4f4;
+    }
 
-{% block title %}This is an example page{% endblock %}
-{% block head %}<link rel="stylesheet" type=text/css href="{{ url_for('static', filename='base.css') }}">{% endblock %}
-{% block navbar %}
-<div class="navbar navbar-fixed-top">
-    <!-- ... -->
+    a {
+        color: #80cbc4
+    }
+
+    a:hover {
+        color: #4f9a94;
+    }
+
+    .dropdown-toggle {
+        line-height: 36px;
+        margin-right: 1em;
+        background: none;
+        color: #c1c1c1;
+    }
+
+    .filters-menu {
+        margin-top: 14px;
+        padding: 1em;
+        min-width: 300px;
+        height: -webkit-fill-available;
+    }
+
+    .filters-menu .filter-item {
+        line-height: 2em;
+        padding: 1em;
+        border-radius: 2px;
+    }
+
+    .filter-item:hover {
+        background: #d7e4e2;
+        border-left: 4px solid #80cbc4;
+    }
+
+    .filter-item a {
+        display: block;
+        text-decoration: none;
+        color: #414141;
+    }
+
+    .btn-primary,
+    .btn-primary:visited,
+    .btn-primary:focus {
+        background-color: #80cbc4;
+        border-color: #4f9a94;
+    }
+
+    .btn-primary:hover,
+    .btn-primary:active {
+        background-color: #4f9a94;
+    }
+
+    .navbar {
+        border-radius: none;
+        background: #24292e;
+    }
+
+    .navbar .container-fluid {
+        padding: 12px;
+    }
+
+    #login-modal {
+        background: white;
+        width: 320px;
+        margin: auto auto;
+        height: 400px;
+        vertical-align: middle;
+        border-radius: 16px;
+    }
+
+    .content {
+        background: none;
+    }
+
+    @media (max-width: 767px) {
+        .navbar-nav .open .dropdown-menu {
+            background: white;
+        }
+    }
+</style>
+{% endblock %} {% block navbar %}
+<nav class="navbar navbar-default navbar-inverse navbar-static-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">
+                <img alt="LIP" src="...">
+            </a>
+        </div>
+
+        <ul class="nav navbar-nav navbar-right">
+            <li>
+                <a href="#" data-toggle="modal" data-target="#login-modal">Login</a>
+            </li>
+            <li>
+                <div class="dropdown clearfix">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false">
+                        Filters
+                    </button>
+                    <div class="dropdown-menu filters-menu" aria-labelledby="dropdownMenuButton">
+                        <ul class="list-unstyled components">
+                            <li class="filter-item">
+                                <a href="#">Cantonese</a>
+                            </li>
+
+                            <li class="filter-item">
+                                <a href="#">Shanghainese</a>
+                            </li>
+                            <li class="filter-item">
+                                <a href="#">¯\_(ツ)_/¯</a>
+                            </li>
+                            <li class="filter-item">
+                                <a href="#">¯\_(ツ)_/¯</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="loginModal" aria-hidden="true" style="display: none;">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">x</button>
+    </div>
+    <div class="modal-body">
+        <form method="post" action='' name="login_form">
+            <p>
+                <input type="text" class="form-control" name="eid" id="username" placeholder="Username">
+            </p>
+            <p>
+                <input type="password" class="form-control" name="passwd" placeholder="Password">
+            </p>
+            <p>
+                <button type="submit" class="btn btn-primary">Login</button>
+                <a href="#">Forgot Password?</a>
+            </p>
+        </form>
+    </div>
+    <div class="modal-footer">
+        Don't have an account?
+        <a href="#" class="btn btn-primary">Register</a>
+    </div>
 </div>
-<h1>Hello, Bootstrap</h1>
-{% endblock %}
-
+{% endblock %} {% block content %}
 <div class="content">
-    {% block content %}{% endblock %}
+    {% block page_content %}{% endblock %}
 </div>
+{% endblock %}
