@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Home
+{{super()}}
+{% endblock %}
+
+{% block head %}
+{{super()}}
+<style>
+  .editor {
+    min-height: 600px;
+    width: 100%;
+  }
+
+  .editor-card {
+    padding: 4em;
+  }
+
+  .article-title-input {
+    font-size: 3em;
+    width: 100%;
+  }
+</style>
+{% endblock %}
+{% block page_content %}
+<div class="card editor-card">
+  <div class="page-header">
+    {% if article is defined %}
+      <input class="article-title-input" value="{{article.title}}"/>
+    {% else %}
+      <input class="article-title-input" value="New Article"/>
+    {% endif %}
+  </div>
+  <button class="btn btn-default">Upload</button>
+  <br/><br/>
+  <div class="article-content">
+    {% if article is defined %}
+      <textarea class="editor">{{article.content}}</textarea>
+    {% else %}
+      <textarea class="editor"></textarea>
+    {% endif %}
+  </div>
+  <br/>
+  <button class="btn btn-primary" style="float: right;">Publish</button>
+</div>
+{% endblock %}
