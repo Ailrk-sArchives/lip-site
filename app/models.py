@@ -14,7 +14,7 @@ class User(db.Model):
 
     @staticmethod
     def get_user(id):
-        return User.query.get(id).first()
+        return User.query.get(id)
 
     @staticmethod
     def get_users():
@@ -42,8 +42,7 @@ class Article(db.Model):
 
     @staticmethod
     def get_article(id):
-        return Article.query.get(id).first()
-
+        return Article.query.get(id)
         
 
     def __repr__(self):
