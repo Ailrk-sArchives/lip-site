@@ -11,16 +11,16 @@ def index():
 
     return render_template('index.html', articles=articles, session=session)
 
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
 
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
         if user is None:
-            user = User(username=form.username.data)
-            db.session.add(user)
+            # the user is not existed. login failed
             session['logined'] = False
+            return redirect(url_for('index'))
         else:
             # check the validaty of password
             if ( hashlib.sha512(form.password.data).hexdigest() == \
@@ -34,26 +34,24 @@ def login():
     return render_template('login.html', form=form)
 
 
-@app.route('/signup')
+@app.route('/signup', methods=['GET', 'POST'])
 def signup():
     form = SignupForm()
 
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
+
+        # check if the user is exist
         if user is None:
             user = User(username=form.username.data)
             db.session.add(user)
+            db.session.commit()
+            form.username.data = ''
+            form.password.data = ''
             session['logined'] = False
         else:
-            # check the validaty of password
-            if ( hashlib.sha512(form.password.data).hexdigest() == \
-                    user.password_hash):
-                session['logined'] = True
-                session['username'] = form.username.data
-                form.username.data = ''
-                form.password.data = ''
-            else:
-                return redirect(url_for('index'))
+            # given user is existed
+            return redirect(url_for('index'))
     return render_template('signup.html', form=form)
 
 @app.route('/article/<id>')
