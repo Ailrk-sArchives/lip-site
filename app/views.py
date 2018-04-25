@@ -1,6 +1,6 @@
 from app import app, db
 from flask import render_template, session, redirect, url_for
-from .forms import LoginForm
+from .forms import LoginForm, SignupForm
 from .models import *
 import hashlib
 
@@ -12,7 +12,7 @@ def index():
     return render_template('index.html', articles=articles, session=session)
 
 @app.route('/login')
-def signup():
+def login():
     form = LoginForm()
 
     if form.validate_on_submit():
