@@ -1,4 +1,4 @@
-from app import app
+from app import app, db
 from flask import render_template, session, redirect, url_for
 from .forms import LoginForm
 from .models import *
@@ -6,7 +6,10 @@ from .models import *
 @app.route("/index")
 @app.route("/")
 def index():
-    return render_template("index.html", username="mohamede")
+    articles = Article.get_many_articles()
+    print(articles)
+    return render_template("index.html", articles=articles)
+
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
