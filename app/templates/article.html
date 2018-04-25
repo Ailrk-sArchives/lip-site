@@ -8,16 +8,12 @@ Home
 {% block head %}
 {{super()}}
 <style>
-  .card-list {
-    list-style-type: none;
-    padding: 0;
-  }
 </style>
 {% endblock %}
 
 {% block page_content %}
 <div class="article-container">
-  <div class="card" style="border-left-color: #ef5350;">
+  <div class="card">
     <div class="page-header">
       <h1>{{article.title}}</h1>
       <p>{{article.author.username}}</p>

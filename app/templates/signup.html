@@ -8,9 +8,18 @@ Signup
 {% block head %}
 {{super()}}
 <style>
-
+  .signup-container {
+    margin: 0 auto;
+    margin-top: 2em;
+    border-radius: 10px;
+    border: 1px solid #efefef;
+    background: white;
+  }
 </style>
 {% endblock %} {% block page_content %}
 <div class="signup-container">
+  <form method="POST" action="" name="signup_form">
+    {{ wtf.quick_form(form) }}
+  </form>
 </div>
 {% endblock %}
