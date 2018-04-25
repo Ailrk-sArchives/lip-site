@@ -32,7 +32,7 @@ class Article(db.Model):
         return Article.query.all()
 
     def get_article(id):
-        return Article.query.filter_by(id=id).first()
+        return Article.query.get(id).first()
 
         
 
