@@ -183,7 +183,11 @@
 
       <ul class="nav navbar-nav navbar-right">
         <li>
-          <a href="{{url_for('login')}}"><span><i class="fa fa-user navbar-i"></i>Login</span></a>
+          {% if session.login %}
+            <a href="{{url_for('login')}}"><span><i class="fa fa-user navbar-i"></i>Hello {{session.username}}</span></a>
+          {% else %}
+            <a href="{{url_for('login')}}"><span><i class="fa fa-user navbar-i"></i>Login</span></a>
+          {% endif %}
         </li>
         <li>
           <div class="dropdown clearfix">
@@ -220,4 +224,10 @@
 <div class="content">
   {% block page_content %}{% endblock %}
 </div>
+{% endblock %}
+
+{% block scripts %}
+{{super()}}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="{{url_for('static', filename='vmd.js')}}"></script>
 {% endblock %}

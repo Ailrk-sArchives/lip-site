@@ -19,12 +19,12 @@ Home
 <ul class="card-list">
   {% for article in articles%}
   <li>
-    <div class="card" style="border-left-color: #ef5350;">
+    <div class="card" style="border-left-color: #ef5350; cursor: pointer;">
       <div class="page-header">
         <h1>{{article.title}}</h1>
       </div>
       <p class="article-text">{{article.content}}</p>
-      <a href="{{ url_for('show_article', id=article.id) }}">read more</a>
+      <a href="{{ url_for('show_article', id=article.id) }}"></a>
     </div>
   </li>
   {% endfor %}

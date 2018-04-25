@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+
+{% block title %}
+{{session.username}} - Profile
+{{super()}}
+{% endblock %}
+
+{% block head %}
+{{super()}}
+<style>
+</style>
+{% endblock %}
+
+{% block page_content %}
+Hello {{session.username}}
+{% endblock %}
