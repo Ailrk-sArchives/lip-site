@@ -12,6 +12,14 @@ class User(db.Model):
     # author's forign key
     articles = db.relationship('Article', backref='author', lazy=True)
 
+    @staticmethod
+    def get_user(id):
+        return User.query.get(id).first()
+
+    @staticmethod
+    def get_users():
+        return User.query.all()
+
 
     def __repr__(self):
         return "<User {}>".format(self.username)
@@ -28,9 +36,11 @@ class Article(db.Model):
     # User
     author_id= db.Column(db.Integer, db.ForeignKey('users.id'))
 
+    @staticmethod
     def get_many_articles():
         return Article.query.all()
 
+    @staticmethod
     def get_article(id):
         return Article.query.get(id).first()
 

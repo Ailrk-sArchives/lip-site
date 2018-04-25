@@ -4,8 +4,8 @@ from .forms import LoginForm
 from .models import *
 import hashlib
 
-@app.route("/index", methods=['GET', 'POST'])
-@app.route("/", methods=['GET', 'POST'])
+@app.route('/index', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
 def index(): 
     articles = Article.get_many_articles()
 
@@ -31,4 +31,5 @@ def index():
     return render_template("index.html", articles=articles, form=form, \
                             session=session)
 
+@app.route('/article/<title>')
 
