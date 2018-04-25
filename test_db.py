@@ -31,5 +31,5 @@ print(YLYL)
 
 db.session.add_all([how_to_jazz,how_to_joji,javad, pewdiepie])
 db.session.commit()
-print(Article.get_many_articles())
-print(Article.get_article(1))
+print(Article.get_many_articles()[0].id)
+print(Article.get_article(1).id)

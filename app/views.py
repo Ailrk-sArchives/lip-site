@@ -56,7 +56,7 @@ def signup():
 
 @app.route('/article/<id>')
 def show_article(id):
-    article = Article.get_article(id)
+    article = Article.get_article(int(id))
     return render_template('article.html', article=article)
 
 
