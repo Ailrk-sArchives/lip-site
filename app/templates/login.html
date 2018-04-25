@@ -1,1 +1,51 @@
+{% extends "layout.html" %}
 
+{% block title %}
+Login
+{{super()}}
+{% endblock %}
+
+{% block head %}
+
+{{super()}}
+<style>
+  .login-container {
+    margin: auto auto;
+    margin-top: 2em;
+    border-radius: 10px;
+    border: 1px solid #efefef;
+    background: white;
+    width: 512px;
+    padding: 4em;
+  }
+
+  .user-icon {
+    text-align: center;
+  }
+
+  .user-icon>.fa-user {
+    font-size: 100px;
+  }
+
+  #register-user {
+    float: right;
+  }
+</style>
+{% endblock %}
+
+{% block page_content %}
+<div class="login-container">
+  <div class="user-icon">
+    <i class="fa fa-user"></i>
+  </div>
+  <form method="POST" action="" name="login_form">
+    {{ wtf.quick_form(form) }}
+  </form>
+  <span id="register-user">
+  Need an account?
+  <a href="{{url_for('signup')}}" class="btn btn-default">
+    Register
+  </a>
+  </span>
+</div>
+{% endblock %}
