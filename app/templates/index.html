@@ -1,7 +1,4 @@
-{% extends "layout.html" %}
-
-{% block head %}
-{{super()}}
+{% extends "layout.html" %} {% block head %} {{super()}}
 <style>
   .card-list {
     list-style-type: none;
@@ -14,7 +11,16 @@
     background: white;
     border-radius: 10px;
     border-left: 4px solid white;
+    margin-bottom: 56px;
+    min-height: 300px;
     max-width: 768px;
+    transition: .3s;
+  }
+
+  .card:hover {
+    -webkit-box-shadow: 10px 10px 72px -13px rgba(0, 0, 0, 0.17);
+    -moz-box-shadow: 10px 10px 72px -13px rgba(0, 0, 0, 0.17);
+    box-shadow: 10px 10px 72px -13px rgba(0, 0, 0, 0.17);
   }
 
   .card .page-header {
@@ -25,19 +31,18 @@
   .card h1 {
     margin: 0
   }
-
 </style>
-{% endblock %}
-
-{% block page_content %}
+{% endblock %} {% block page_content %}
 <ul class="card-list">
-{% for article in articles%}
+  {% for article in articles%}
   <li>
     <div class="card" style="border-left-color: #ef5350;">
-        <div class="page-header"><h1>{{article.title}}</h1></div>
+      <div class="page-header">
+        <h1>{{article.title}}</h1>
+      </div>
       <p>{{article.content}}</p>
     </div>
   </li>
-{% endfor %}
+  {% endfor %}
 </ul>
 {% endblock %}
