@@ -59,4 +59,18 @@ def show_article(id):
     article = Article.get_article(int(id))
     return render_template('article.html', article=article)
 
+@app.route('/new')
+def new():
+    return render_template('editor.html')
+
+
+
+
+
+
+
+
+
+
+
 
