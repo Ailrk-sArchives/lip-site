@@ -12,5 +12,12 @@
 {% endblock %}
 
 {% block page_content %}
-Hello {{session.username}}
+<div class="profile-container">
+  <div class="card">
+    <div class="page-header">
+      <h1>{{session.username}}</h1>
+    </div>
+    <a class="btn btn-primary" href="{{url_for('logout')}}">Logout</a>
+  </div>
+</div>
 {% endblock %}
