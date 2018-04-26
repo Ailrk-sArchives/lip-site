@@ -1,4 +1,3 @@
-import hashlib
 
 from app import app, db
 from flask import render_template, session, redirect, url_for, flash 
@@ -29,7 +28,8 @@ def login():
             return redirect(url_for('login'))
         else:
             # check the validaty of password
-            if  hashlib.sha512(str(form.password.data).encode('utf-8')).hexdigest() == user.password_hash:
+            if  hashlib.sha512(str(form.password.data).encode('utf-8')).hexdigest()\
+                             == user.password_hash:
                 SessionManager.login_on(session, form.username.data)
                 logger.info('User ' + session['username'] +  ' logined')
                 return redirect(url_for('index'))
@@ -53,11 +53,10 @@ def signup():
 
         # check if the user is exist
         if user is None:
-            user = User(username=form.username.data, \
-                    password_hash=hashlib.sha512(str(form.password.data).encode('utf-8')).hexdigest() )
-            db.session.add(user)
-            db.session.commit()
-       
+            User.add_user(username=form.username.data, \
+                        password=form.password.data, \
+                        email=form.email.data) 
+
             SessionManager.login_off(session)
             logger.info('User ' + form.username.data + ' signuped')
             return redirect(url_for('login'))
@@ -77,13 +76,20 @@ def show_article(article_id):
     article = Article.get_article(article_id)
     return render_template('article.html', article=article)
 
-# havent done yet
 @app.route('/new', methods=['GET', 'POST'])
 def new():
     """
     Create empty EditorForm.
     """
     form = EditorForm()
+
+    if form.validate_on_submit():
+        article_id= Article.new_article(title=form.title.data, \
+                            content=form.content.data, \
+                            category=Category.get_category(form.category.data),\
+                            author=session['username'] )        
+        return redirect(url_for(show_article, article_id=article_id))
+
     return render_template('editor.html', form=form)
 
 @app.route('/edit/article/<int:article_id>', methods=['GET', 'POST'])
@@ -96,6 +102,7 @@ def edit(article_id):
     
     form.articlename.data = article.title
     form.textarea.data = article.content
+
     return render_template('editor.html', form=form)
 
 @app.route('/profile')
@@ -106,7 +113,3 @@ def profile():
 def logout():
     SessionManager.login_off()
     return redirect(url_for('index'))
-    
-
-
-

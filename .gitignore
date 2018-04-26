@@ -137,5 +137,5 @@ pip-selfcheck.json
 
 ### avoid Database
 *.db
-
+*.log
 # End of https://www.gitignore.io/api/vim,python,virtualenv,visualstudiocode

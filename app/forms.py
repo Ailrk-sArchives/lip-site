@@ -19,6 +19,3 @@ class EditorForm(FlaskForm):
     articlename = StringField('article name', validators=[DataRequired()])
     textarea = TextAreaField('textarea', validators=[DataRequired()])     
     submit = SubmitField('Publish')
-     
-
-

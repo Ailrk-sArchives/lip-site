@@ -24,5 +24,3 @@ class SessionManager():
             session['username'] = None
         except TypeError:
             logger.error('Session Error: unable to change login status')        
-
-
