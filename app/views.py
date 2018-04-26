@@ -1,4 +1,3 @@
-
 from app import app, db
 from flask import render_template, session, redirect, url_for, flash 
 from .forms import LoginForm, SignupForm, EditorForm
@@ -113,3 +112,7 @@ def profile():
 def logout():
     SessionManager.login_off()
     return redirect(url_for('index'))
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
