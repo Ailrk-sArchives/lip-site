@@ -7,7 +7,8 @@ class User(db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), unique=True)
-    password_hash = db.Column(db.String(128));
+    password_hash = db.Column(db.String(128))
+    email = db.Column(db.String(128))
     
     # author's forign key
     articles = db.relationship('Article', backref='author', lazy=True)
@@ -31,7 +32,8 @@ class Article(db.Model):
     __tablename__ = 'articles'
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(64), index=True)
-    content = db.Column(db.String(5000), index=True)
+    content = db.Column(db.String())
+    category = db.Column(db.String(64))
 
     # User
     author_id= db.Column(db.Integer, db.ForeignKey('users.id'))
@@ -43,7 +45,7 @@ class Article(db.Model):
     @staticmethod
     def get_article(id):
         return Article.query.get(id)
-        
+
 
     def __repr__(self):
         return "<Article {}  by {}>".format(self.title, self.author)

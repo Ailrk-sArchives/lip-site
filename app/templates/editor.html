@@ -13,25 +13,13 @@ Home
 {% block page_content %}
 <div class="card editor-card">
   <div class="page-header">
-    {% if article is defined %}
-        
-      <input class="article-title-input" value="{{article.title}}"/>
-    {% else %}
-      <input class="article-title-input" placeholder="New Article"/>
-    {% endif %}
+      {{form.articlename()}}
   </div>
   <button class="btn btn-default">Upload</button>
   <br/><br/>
   <div class="article-content">
-
-    <!--new: blank; editor: load file-->
-    {% if article is defined %}
-        {{ wtf.quick_form(form)}}
-    {% else %}
-      <textarea class="editor"></textarea>
-    {% endif %}
+      {{form.textarea()}}
+      {{form.submit()}}
   </div>
-  <br/>
-  <button class="btn btn-primary" style="float: right;">Publish</button>
 </div>
 {% endblock %}
