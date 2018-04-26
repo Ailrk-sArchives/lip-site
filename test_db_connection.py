@@ -5,7 +5,7 @@ import hashlib
 db.drop_all()
 db.create_all()
 
-passwd = hashlib.sha512('123'.encode('utf-8d')).hexdigest()
+passwd = hashlib.sha512('123'.encode('utf-8')).hexdigest()
 
 javad = User(username='javad', password_hash=passwd,  email='javad@ubc.com')
 print (javad)

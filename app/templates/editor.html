@@ -1,25 +1,89 @@
 {% extends "layout.html" %}
-{% import "bootstrap/wtf.html" as wtf%}
+
+{% import "bootstrap/wtf.html" as wtf %}
 
 {% block title %}
-Home
+Editor
 {{super()}}
 {% endblock %}
 
-{% block head %}
+{%block head %}
 {{super()}}
+<style>
+  #article-title-editor {
+    font-size: 2em;
+    width: 100%;
+  }
 
+  #article-content-editor {
+    width: 100%;
+    height: 100%;
+    font-family: monospace;
+    resize: vertical;
+    min-height: 600px;
+  }
+
+  .editor-card {
+    padding: 4em 2em;
+  }
+
+  .article-publish {
+    float: right;
+  }
+
+  input[type=file] {
+    display: inline;
+  }
+
+  #article-file>input {
+    display: none;
+  }
+
+  .editor-filters-menu {
+    height:  auto;
+  }
+</style>
 {% endblock %}
+
 {% block page_content %}
 <div class="card editor-card">
   <div class="page-header">
-      {{form.articlename()}}
+    <h1>Article Editor</h1>
+    <br/>
+    {{form.articlename(id='article-title-editor')}}
   </div>
-  <button class="btn btn-default">Upload</button>
-  <br/><br/>
+  <br/>
+  <div class="file-upload">
+    <input class="btn btn-default" id="article-file" type="file" />
+    <button class="btn btn-default" id="upload-article-file">Upload</button>
+  </div>
+  <br/>
+
+  <div class="dropdown show">
+    <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
+      aria-expanded="false">
+      Select Category
+    </a>
+
+    <div class="dropdown-menu filters-menu editor-filters-menu" aria-labelledby="dropdownMenuLink">
+      <ul class="list-unstyled components">
+        <li class="filter-item">
+          <a href="#A">Category A</a>
+        </li>
+        <li class="filter-item">
+          <a href="#B">Category B</a>
+        </li>
+        <li class="filter-item">
+          <a href="#C">Category C</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <br/>
   <div class="article-content">
-      {{form.textarea()}}
-      {{form.submit()}}
+    {{form.textarea(id='article-content-editor')}}
+    {{form.submit(class='btn btn-primary article-publish')}}
   </div>
 </div>
 {% endblock %}
