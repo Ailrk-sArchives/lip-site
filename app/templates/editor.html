@@ -1,4 +1,5 @@
 {% extends "layout.html" %}
+{% import "bootstrap/wtf.html" as wtf%}
 
 {% block title %}
 Home
@@ -7,36 +8,25 @@ Home
 
 {% block head %}
 {{super()}}
-<style>
-  .editor {
-    min-height: 600px;
-    width: 100%;
-  }
 
-  .editor-card {
-    padding: 4em;
-  }
-
-  .article-title-input {
-    font-size: 3em;
-    width: 100%;
-  }
-</style>
 {% endblock %}
 {% block page_content %}
 <div class="card editor-card">
   <div class="page-header">
     {% if article is defined %}
+        
       <input class="article-title-input" value="{{article.title}}"/>
     {% else %}
-      <input class="article-title-input" value="New Article"/>
+      <input class="article-title-input" placeholder="New Article"/>
     {% endif %}
   </div>
   <button class="btn btn-default">Upload</button>
   <br/><br/>
   <div class="article-content">
+
+    <!--new: blank; editor: load file-->
     {% if article is defined %}
-      <textarea class="editor">{{article.content}}</textarea>
+        {{ wtf.quick_form(form)}}
     {% else %}
       <textarea class="editor"></textarea>
     {% endif %}
