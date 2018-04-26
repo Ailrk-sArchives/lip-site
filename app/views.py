@@ -1,9 +1,11 @@
+import hashlib
+
 from app import app, db
-from flask import render_template, session, redirect, url_for
+from flask import render_template, session, redirect, url_for, flash 
 from .forms import LoginForm, SignupForm, EditorForm
 from .models import *
+from .utils import SessionManager, logger
 
-import hashlib
 
 @app.route('/index', methods=['GET', 'POST'])
 @app.route('/', methods=['GET', 'POST'])
@@ -18,23 +20,27 @@ def login():
 
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
-
         if user is None:
-            print("xxx")
-            # the user is not existed. login failed
-            session['logined'] = False
-            return redirect(url_for('index'))
+            # X the user is not existed. login failed
+            SessionManager.login_off(session)
+            msg = 'user is not existed'
+            flash(msg)
+            logger.debug(msg)
+            return redirect(url_for('login'))
         else:
             # check the validaty of password
-            if ( hashlib.sha512(str(form.password.data).encode('utf-8')).hexdigest() == \
-                    user.password_hash):
-                session['logined'] = True
-                session['username'] = form.username.data
-                form.username.data = ''
-                form.password.data = ''
-                print("User" + session['username'] +"logined")
-            else:
+            if  hashlib.sha512(str(form.password.data).encode('utf-8')).hexdigest() == user.password_hash:
+                SessionManager.login_on(session, form.username.data)
+                logger.info('User ' + session['username'] +  ' logined')
                 return redirect(url_for('index'))
+            else:
+                # X passwd is not correct, login failed
+                msg = 'Invalid password'
+                flash(msg)
+                logger.warn(msg)
+                SessionManager.login_off(session)
+                return redirect(url_for('login'))
+
     return render_template('login.html', form=form)
 
 
@@ -48,36 +54,49 @@ def signup():
         # check if the user is exist
         if user is None:
             user = User(username=form.username.data, \
-                        password_hash=hashlib.sha512(str(form.password.data).encode('utf-8')).hexdigest() )
+                    password_hash=hashlib.sha512(str(form.password.data).encode('utf-8')).hexdigest() )
             db.session.add(user)
             db.session.commit()
-
-            print("New User" + form.username.data +"signuped")
-
-            form.username.data = ''
-            form.password.data = ''
-            session['logined'] = False
+       
+            SessionManager.login_off(session)
+            logger.info('User ' + form.username.data + ' signuped')
             return redirect(url_for('login'))
 
         else:
-            # given user is existed
-            return redirect(url_for('index'))
+            # X given user is existed
+            msg = 'username is already existed'
+            flash(msg)
+            logger.debug(msg)
+
+            SessionManager.login_off(session)
+            return redirect(url_for('signup'))
     return render_template('signup.html', form=form)
 
-@app.route('/article/<int:id>')
-def show_article(id):
-    article = Article.get_article(id)
+@app.route('/article/<int:article_id>')
+def show_article(article_id):
+    article = Article.get_article(article_id)
     return render_template('article.html', article=article)
 
 # havent done yet
-@app.route('/new')
+@app.route('/new', methods=['GET', 'POST'])
 def new():
+    """
+    Create empty EditorForm.
+    """
     form = EditorForm()
     return render_template('editor.html', form=form)
 
-@app.route('/edit')
-def edit():
-    return render_template('editor.html')
+@app.route('/edit/article/<int:article_id>', methods=['GET', 'POST'])
+def edit(article_id):
+    """
+    Create EditorForm with article and title
+    """
+    form = EditorForm()
+    article = Article.get_article(article_id)
+    
+    form.articlename.data = article.title
+    form.textarea.data = article.content
+    return render_template('editor.html', form=form)
 
 @app.route('/profile')
 def profile():
@@ -85,11 +104,9 @@ def profile():
 
 @app.route('/logout')
 def logout():
-    session['logined'] = False
-    session['username'] = None
+    SessionManager.login_off()
     return redirect(url_for('index'))
     
-
 
 
 

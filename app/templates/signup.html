@@ -27,6 +27,16 @@ Signup
   }
 </style>
 {% endblock %} {% block page_content %}
+<div class="container">
+{% for message in get_flashed_messages() %}
+<div class="alert alert-warning">
+    <button class="close" data-dismiss="alert">&times;</button>
+    {{ message }}
+</div>
+{% endfor%}
+</div>
+
+
 <div class="signup-container">
   <div class="user-icon">
     <i class="fa fa-user"></i>
