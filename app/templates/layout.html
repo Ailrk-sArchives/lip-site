@@ -136,7 +136,7 @@
     transition: .3s;
   }
 
-  .card:hover {
+  .click-card:hover {
     -webkit-box-shadow: 10px 10px 72px -13px rgba(0, 0, 0, 0.17);
     -moz-box-shadow: 10px 10px 72px -13px rgba(0, 0, 0, 0.17);
     box-shadow: 10px 10px 72px -13px rgba(0, 0, 0, 0.17);
@@ -148,7 +148,9 @@
   }
 
   .card h1 {
-    margin: 0
+    margin: 0;
+    color: #424242;
+    font-weight: bold;
   }
 
   @media (min-width: 992px) {
@@ -227,7 +229,7 @@
 {% endblock %}
 
 {% block scripts %}
-{{super()}}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="{{url_for('static', filename='vmd.js')}}"></script>
+{{super()}}
 {% endblock %}
