@@ -57,6 +57,7 @@ def signup():
             form.username.data = ''
             form.password.data = ''
             session['logined'] = False
+            return redirect(url_for('login'))
 
         else:
             # given user is existed
@@ -84,7 +85,10 @@ def profile():
 
 @app.route('/logout')
 def logout():
-    pass
+    session['logined'] = False
+    session['username'] = None
+    return redirect(url_for('index'))
+    
 
 
 
