@@ -83,21 +83,23 @@ def new():
     form = EditorForm()
     categories = Category.get_many_categories()
 
+    print("5")
     if session['logined'] and session['username']:
-        if form.validate_on_submit():
-            article= Article.new_article(title=form.title.data, \
-                                content=form.content.data, \
-                                category=Category.get_category(form.category.data),\
-                                author=session['username'] )        
-            if article:
-                print("I m here 1")
-                logger.info('new article ' + '<' + article.title + '> created')
-                return redirect(url_for(show_article,article_id=article.id))
-            else:
-                flash('invalid input')
-                return redirect(url_for('new'))
+        article= Article.new_article(title=form.articlename.data, \
+                            content=form.textarea.data, \
+                            category=Category.get_category(form.category.data),\
+                            author=User.get_user_by_name(username=session['username']) )        
+        if article:
+            print("1")
+            logger.info('new article ' + '<' + article.title + '> created')
+            return redirect(url_for('show_article', article_id=article.id))
+        else:
+            print("3")
+            flash('invalid input')
+            return redirect(url_for('new'))
 
     else:
+        print("4")
         logger.error('Not logined, unable to create article')
         flash('please login before create article')
         SessionManager.login_off(session)
