@@ -1,0 +1,55 @@
+<head>
+  <style>
+    body {
+      background: #f4f4f4;
+    }
+
+    .container {
+      margin: auto auto;
+      max-width: 768px;
+      text-align: center;
+      padding: 0 2em 4em 2em;
+      background: white;
+      border-radius: 8px;
+      border: 1px solid #eee;
+    }
+
+    .container-bottom {
+      margin-top: 48px;
+      border-top: 1px solid #eee;
+      width: 100%;
+    }
+
+    p,
+    a {
+      font-size: 1.2em;
+      font-family: monospace;
+    }
+
+    p {
+      color: #c1c1c1;
+    }
+
+    a {
+      color: #80cbc4;
+    }
+
+    h1 {
+      font-size: 14em;
+      font-family: Helvetica, Arial, sans-serif;
+      color: #424242;
+      margin: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>{% block error_code %}{% endblock %}</h1>
+    <p>{% block error_type %}{% endblock %}</p>
+    <div class="container-bottom">
+      <p>{% block error_message %}{% endblock %}</p>
+      <a href="./">return home</a>
+    </div>
+  </div>
+</body>

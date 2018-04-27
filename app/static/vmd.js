@@ -16,3 +16,8 @@ $("#upload-article-file").click(function () {
 
   reader.readAsText(file);
 });
+
+// select article category  (editor)
+$(".editor-cate-drop").click(function () {
+  $("#article-cate-editor").val($(this).text());
+});

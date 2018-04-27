@@ -21,6 +21,7 @@ Editor
     font-family: monospace;
     resize: vertical;
     min-height: 600px;
+    font-size: 1.2em;
   }
 
   .editor-card {
@@ -68,7 +69,7 @@ Editor
   <br/>
   <div class="file-upload">
     <input class="btn btn-default" id="article-file" type="file" />
-    <button class="btn btn-default" id="upload-article-file">Upload</button>
+    <button type="button" class="btn btn-default" id="upload-article-file">Upload</button>
   </div>
   <br/>
 
@@ -77,12 +78,13 @@ Editor
       aria-expanded="false">
       Select Category
     </a>
+    {{form.category(id='article-cate-editor')}}
 
     <div class="dropdown-menu filters-menu editor-filters-menu" aria-labelledby="dropdownMenuLink">
       <ul class="list-unstyled components">
         {% for cate in categories %}
         <li class="filter-item">
-            <a href="" class="editor-cate-drop">{{ cate.category }}</a>
+            <a class="editor-cate-drop">{{ cate.category }}</a>
         </li>
         {% endfor %}
       </ul>
@@ -91,7 +93,6 @@ Editor
 
   <br/>
   <div class="article-content">
-    {{form.category(id='article-cate-editor')}}
     {{form.textarea(id='article-content-editor')}}
     {{form.submit(class='btn btn-primary article-publish')}}
   </div>
