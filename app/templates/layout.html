@@ -224,9 +224,9 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
           {% if session.logined %}
-            <a href="{{url_for('profile')}}"><span><i class="fa fa-user navbar-i"></i>Hello {{session.username}}</span></a>
+            <a href="{{url_for('profile')}}"><span><i class="fa fa-user navbar-i"></i><b>Hello {{session.username}}</b></span></a>
           {% else %}
-            <a href="{{url_for('login')}}"><span><i class="fa fa-user navbar-i"></i>Login</span></a>
+            <a href="{{url_for('login')}}"><span><i class="fa fa-user navbar-i"></i><b>Login</b></span></a>
           {% endif %}
         </li>
         <li>
@@ -269,7 +269,7 @@
 
 <footer>
   <div class="footer-container">
-    <a href="#about">About</a>
+    <a href="#about"><b>About</b></a>
     <br/><br/>
     <p id="copyr">&copy; 2018 - LIP</p>
   </div>
