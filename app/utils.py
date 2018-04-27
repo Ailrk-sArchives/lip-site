@@ -1,4 +1,5 @@
 import logging
+from .models import User
 
 """
 logger, SeesionManager
@@ -13,7 +14,10 @@ class SessionManager():
     def login_on(session, username):
         try:
             session['logined'] = True
-            session['username'] = username
+            user = User.get_user_by_name(username=username)
+            session['username'] = user.username
+            session['roletitle'] = user.role.roletitle
+            print (user.role.roletitle)
         except TypeError:
             logger.error('Session Error: unable to change login status')        
 
@@ -22,5 +26,6 @@ class SessionManager():
         try:
             session['logined'] = False
             session['username'] = None
+            session['roletitle'] = None
         except TypeError:
             logger.error('Session Error: unable to change login status')        

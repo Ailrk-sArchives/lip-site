@@ -5,6 +5,8 @@ from .models import *
 from .utils import SessionManager, logger
 
 
+
+
 @app.route('/index', methods=['GET', 'POST'])
 @app.route('/', methods=['GET', 'POST'])
 def index(): 
@@ -81,26 +83,34 @@ def new():
     Create empty EditorForm.
     """
     form = EditorForm()
+    categories = Category.get_many_categories()
 
     if session['logined'] and session['username']:
-        categories = Category.get_many_categories()
 
-        if form.validate_on_submit():
-            article= Article.new_article(title=form.articlename.data, \
-                                content=form.textarea.data, \
-                                category=Category.get_category(form.category.data),\
-                                author=User.get_user_by_name(username=session['username']) )        
-            if article:
-                logger.info('new article ' + '<' + article.title + '> created')
-                return redirect(url_for('show_article', article_id=article.id))
-            else:
-                flash('invalid input')
-                return redirect(url_for('new'))
+        # admin check. only admin can create article
+        if session['roletitle'] == Role.query.filter_by(roletitle='admin').first().roletitle:
+            if form.validate_on_submit():
+                article= Article.new_article(title=form.articlename.data, \
+                                    rawcontent=form.textarea.data, \
+                                    category=Category.get_category(form.category.data),\
+                                    author=User.get_user_by_name(username=session['username']) )        
+                if article:
+                    logger.info('new article ' + '<' + article.title + '> created')
+                    return redirect(url_for('show_article', article_id=article.id))
+                else:
+                    flash('invalid input')
+                    return redirect(url_for('new'))
 
-        print(form.errors)
+        else:
+            logger.error('Unauthorized, unable to create article')
+            flash('Only admin can create articles')
+            return redirect(url_for('index'))
+    
+        if form.errors: print(form.errors)
+
 
     else:
-        logger.error('Not logined, unable to create article')
+        logger.error( 'Unlogined, unable to create article')
         flash('please login before create article')
         SessionManager.login_off(session)
         return redirect(url_for('index'))
@@ -114,20 +124,19 @@ def edit(article_id):
     """
     form = EditorForm()
     article = Article.get_article(article_id)
+
     if session['logined'] and session['username']:
         categories = Category.get_many_categories()
 
         if form.validate_on_submit():
-            article= Article.new_article(title=form.articlename.data, \
-                                content=form.textarea.data, \
-                                category=Category.get_category(form.category.data),\
-                                author=User.get_user_by_name(username=session['username']) )        
-            if article:
-                print("1")
+            edited_article = Article.edit_article(article_id=article_id,\
+                                title=form.articlename.data, \
+                                rawcontent=form.textarea.data, \
+                                category=Category.get_category(form.category.data) )
+            if edited_article:
                 logger.info('new article ' + '<' + article.title + '> created')
                 return redirect(url_for('show_article', article_id=article.id))
             else:
-                print("3")
                 flash('invalid input')
                 return redirect(url_for('new'))
 
@@ -141,7 +150,8 @@ def edit(article_id):
 
    
     form.articlename.data = article.title
-    form.textarea.data = article.content
+    form.textarea.data = article.rawcontent
+    form.category.data = article.category.category
 
     return render_template('editor.html', form=form, categories=categories)
 

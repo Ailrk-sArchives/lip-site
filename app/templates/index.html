@@ -16,6 +16,16 @@ Home
 {% endblock %}
 
 {% block page_content %}
+
+<div class="container">
+{% for message in get_flashed_messages() %}
+<div class="alert alert-warning">
+    <button class="close" data-dismiss="alert">&times;</button>
+        {{ message }}
+</div>
+{% endfor%}
+</div>
+
 <ul class="card-list">
   {% for article in articles%}
   <li>
@@ -23,7 +33,7 @@ Home
       <div class="page-header">
         <h1>{{article.title}}</h1>
       </div>
-      <p class="article-text">{{article.content}}</p>
+      <p class="article-text">{{article.content | safe }}</p>
       <a href="{{ url_for('show_article', article_id=article.id) }}"></a>
     </div>
   </li>

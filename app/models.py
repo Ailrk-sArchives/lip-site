@@ -1,5 +1,5 @@
 from app import db
-import hashlib
+import hashlib, markdown
 
 class User(db.Model):
     """
@@ -14,6 +14,9 @@ class User(db.Model):
     # author's forign key
     articles = db.relationship('Article', backref='author', lazy=True)
 
+    # role_id
+    role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
+
     @staticmethod
     def get_user(user_id):
         return User.query.get(user_id)
@@ -22,18 +25,36 @@ class User(db.Model):
     def get_user_by_name(username):
         return User.query.filter_by(username=username).first()
 
+        user = User.query.get(user_id)
+        user = User.query.get(user_id)
     @staticmethod
     def get_users():
         return User.query.all()
 
+    @staticmethod
     def add_user(username, password, email):
         user = User(username=username, \
                     password_hash= \
                     hashlib.sha512( str(password).encode('utf-8')).hexdigest(),\
                     email=email)
-
         db.session.add(user)
         db.session.commit()
+
+    def authorize(self, role):
+        try:
+            self.role = role
+        except BaseException:
+            logger.error('autorizaztion error')
+
+        db.session.commit()
+
+    @staticmethod
+    def authorize_by_id(user_id, role):
+        try:
+            user = User.query.get(user_id)
+            user.role = role
+        except BaseException:
+            logger.error('id authorization error')
 
 
     def __repr__(self):
@@ -46,7 +67,9 @@ class Article(db.Model):
     __tablename__ = 'articles'
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(64), index=True)
+    rawcontent = db.Column(db.String())
     content = db.Column(db.String())
+
 
     # User
     author_id= db.Column(db.Integer, db.ForeignKey('users.id'))
@@ -60,20 +83,24 @@ class Article(db.Model):
     def get_article(article_id):
         return Article.query.get(article_id)
 
-    def new_article(title, content, category,  author):
-        article = Article(title=title, content=content, \
+    @staticmethod
+    def new_article(title, rawcontent, category,  author):
+        article = Article(title=title, rawcontent=rawcontent, \
+                            content=markdown.markdown(rawcontent), \
                             category=category, author=author)
         db.session.add(article)
         db.session.commit()
         return article
 
-    def edit_article(article_id, title, content, category=None):
+    @staticmethod
+    def edit_article(article_id, title, rawcontent, category=None):
         article = Article.query.get(article_id)
         article.title = title
-        article.content = content
+        article.rawcontent = rawcontent
+        article.content = markdown.markdown(rawcontent) 
         article.category = category
         db.session.commit()
-
+        return article
 
     def __repr__(self):
         return '<Article {}  by {}>'.format(self.title, self.author)
@@ -84,7 +111,7 @@ class Category(db.Model):
     """
     __tablename__ = 'categories'
     id = db.Column(db.Integer, primary_key=True)
-    category = db.Column(db.String(64))
+    category = db.Column(db.String(64), unique=True)
 
     # one category to many articles
     articles = db.relationship('Article', backref='category')
@@ -99,3 +126,9 @@ class Category(db.Model):
         
     def __repr__(self):
         return '<Category {}>'.format(self.category) 
+
+class Role(db.Model):
+    __tablename__ = 'roles'
+    id = db.Column(db.Integer, primary_key=True)
+    roletitle = db.Column(db.String(64))
+    user = db.relationship('User', backref='role')
