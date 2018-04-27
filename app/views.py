@@ -91,11 +91,9 @@ def new():
                                 category=Category.get_category(form.category.data),\
                                 author=User.get_user_by_name(username=session['username']) )        
             if article:
-                print("1")
                 logger.info('new article ' + '<' + article.title + '> created')
                 return redirect(url_for('show_article', article_id=article.id))
             else:
-                print("3")
                 flash('invalid input')
                 return redirect(url_for('new'))
 
@@ -116,15 +114,36 @@ def edit(article_id):
     """
     form = EditorForm()
     article = Article.get_article(article_id)
-    
+    if session['logined'] and session['username']:
+        categories = Category.get_many_categories()
+
+        if form.validate_on_submit():
+            article= Article.new_article(title=form.articlename.data, \
+                                content=form.textarea.data, \
+                                category=Category.get_category(form.category.data),\
+                                author=User.get_user_by_name(username=session['username']) )        
+            if article:
+                print("1")
+                logger.info('new article ' + '<' + article.title + '> created')
+                return redirect(url_for('show_article', article_id=article.id))
+            else:
+                print("3")
+                flash('invalid input')
+                return redirect(url_for('new'))
+
+        print(form.errors)
+
+    else:
+        logger.error('Not logined, unable to create article')
+        flash('please login before create article')
+        SessionManager.login_off(session)
+        return redirect(url_for('index'))
+
+   
     form.articlename.data = article.title
     form.textarea.data = article.content
 
-    return render_template('editor.html', form=form)
-
-@app.route('/editor_choose_category/<category>')
-def editor_choose_cate(category):
-    return category    
+    return render_template('editor.html', form=form, categories=categories)
 
 @app.route('/profile')
 def profile():
@@ -138,3 +157,19 @@ def logout():
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('404.html'), 404
+
+@app.errorhandler(403)
+def forbidden(e):
+    return render_template('402.html'),403
+
+@app.errorhandler(500)
+def internal_server_error(e):
+    return render_templatel('500.html'), 500
+
+@app.errorhandler(502)
+def bad_gateway(e):
+    return render_template('502.html'), 502
+
+@app.route('/about')
+def about():
+    return render_template('about.html')
