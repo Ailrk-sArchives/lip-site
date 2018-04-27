@@ -176,10 +176,19 @@
   footer {
     position: relative;
     margin-top: -180px;
-    border-top: 8px solid #80cbc4;
+    border-top: 6px solid #80cbc4;
     height: 180px;
     clear: both;
     background: #24292e;
+  }
+
+  .footer-container {
+    padding: 4em;
+    height: 100%;
+    margin: 0 auto;
+    text-align: center;
+    color: #efefef;
+    max-width: 768px;
   }
 
   @media (min-width: 992px) {
@@ -259,7 +268,11 @@
 </div>
 
 <footer>
-  <h1>Hello</h1>
+  <div class="footer-container">
+    <a href="#about">About</a>
+    <br/><br/>
+    <p id="copyr">&copy; 2018 - LIP</p>
+  </div>
 </footer>
 {% endblock %}
 
