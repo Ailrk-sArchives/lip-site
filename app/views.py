@@ -81,15 +81,29 @@ def new():
     Create empty EditorForm.
     """
     form = EditorForm()
+    categories = Category.get_many_categories()
 
-    if form.validate_on_submit():
-        article_id= Article.new_article(title=form.title.data, \
-                            content=form.content.data, \
-                            category=Category.get_category(form.category.data),\
-                            author=session['username'] )        
-        return redirect(url_for(show_article, article_id=article_id))
+    if session['logined'] and session['username']:
+        if form.validate_on_submit():
+            article= Article.new_article(title=form.title.data, \
+                                content=form.content.data, \
+                                category=Category.get_category(form.category.data),\
+                                author=session['username'] )        
+            if article:
+                print("I m here 1")
+                logger.info('new article ' + '<' + article.title + '> created')
+                return redirect(url_for(show_article,article_id=article.id))
+            else:
+                flash('invalid input')
+                return redirect(url_for('new'))
 
-    return render_template('editor.html', form=form)
+    else:
+        logger.error('Not logined, unable to create article')
+        flash('please login before create article')
+        SessionManager.login_off(session)
+        return redirect(url_for('index'))
+
+    return render_template('editor.html', form=form, categories=categories)
 
 @app.route('/edit/article/<int:article_id>', methods=['GET', 'POST'])
 def edit(article_id):
@@ -103,6 +117,10 @@ def edit(article_id):
     form.textarea.data = article.content
 
     return render_template('editor.html', form=form)
+
+@app.route('/editor_choose_category/<category>')
+def editor_choose_cate(category):
+    return category    
 
 @app.route('/profile')
 def profile():

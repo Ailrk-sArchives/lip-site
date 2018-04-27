@@ -18,4 +18,5 @@ class SignupForm(FlaskForm):
 class EditorForm(FlaskForm):
     articlename = StringField('article name', validators=[DataRequired()])
     textarea = TextAreaField('textarea', validators=[DataRequired()])     
+    category = StringField('category', validators=[DataRequired()])
     submit = SubmitField('Publish')

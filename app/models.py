@@ -61,9 +61,9 @@ class Article(db.Model):
                             category=category, author=author)
         db.session.add(article)
         db.session.commit()
-        return article.id
+        return article
 
-    def edit_article(article_id, title, content, category):
+    def edit_article(article_id, title, content, category=None):
         article = Article.query.get(article_id)
         article.title = title
         article.content = content
@@ -84,6 +84,10 @@ class Category(db.Model):
 
     # one category to many articles
     articles = db.relationship('Article', backref='category')
+
+    @staticmethod
+    def get_many_categories():
+        return Category.query.all()
 
     @staticmethod
     def get_category(category):

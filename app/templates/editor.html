@@ -46,6 +46,19 @@ Editor
 {% endblock %}
 
 {% block page_content %}
+
+<div class="container">
+{% for message in get_flashed_messages() %}
+<div class="alert alert-warning">
+    <button class="close" data-dismiss="alert">&times;</button>
+        {{ message }}
+</div>
+{% endfor%}
+</div>
+
+
+<form action="" method="post", name="editor_form">
+
 <div class="card editor-card">
   <div class="page-header">
     <h1>Article Editor</h1>
@@ -67,23 +80,22 @@ Editor
 
     <div class="dropdown-menu filters-menu editor-filters-menu" aria-labelledby="dropdownMenuLink">
       <ul class="list-unstyled components">
+        {% for cate in categories %}
         <li class="filter-item">
-          <a href="#A">Category A</a>
+            <a href="" class="editor-cate-drop">{{ cate.category }}</a>
         </li>
-        <li class="filter-item">
-          <a href="#B">Category B</a>
-        </li>
-        <li class="filter-item">
-          <a href="#C">Category C</a>
-        </li>
+        {% endfor %}
       </ul>
     </div>
   </div>
 
   <br/>
   <div class="article-content">
+    {{form.category(id='article-cate-editor')}}
     {{form.textarea(id='article-content-editor')}}
     {{form.submit(class='btn btn-primary article-publish')}}
   </div>
 </div>
+
+</form>
 {% endblock %}
