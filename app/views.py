@@ -1,5 +1,5 @@
 from app import app, db
-from flask import render_template, session, redirect, url_for, flash
+from flask import render_template, session, redirect, url_for, flash, abort
 from .forms import LoginForm, SignupForm, EditorForm
 from .models import *
 from .utils import SessionManager, logger
@@ -16,12 +16,14 @@ def inject_categories():
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/<category>', methods=['GET', 'POST'])
 def index(category=None): 
+    articles=[]
     if not category:
         articles = Article.get_many_articles()
     else:
         category = Category.query.filter_by(category=category).first()
+        if not category: abort(404)
         articles = Article.get_many_articles_by_category(article_cate=category)
-
+    
     return render_template('index.html', articles=articles, session=session)
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -86,6 +88,8 @@ def signup():
 @app.route('/article/<int:article_id>')
 def show_article(article_id):
     article = Article.get_article(article_id)
+    
+    if not article: abort(404)
     return render_template('article.html', article=article)
 
 @app.route('/new', methods=['GET', 'POST'])
@@ -134,6 +138,12 @@ def edit(article_id):
     """
     form = EditorForm()
     article = Article.get_article(article_id)
+
+    if not article: abort((404)
+
+    if article.author != session['username']:
+        flash('Only author can modify their own articles')
+        return redirect(url_for('index'))
 
     if session['logined'] and session['username']:
         categories = Category.get_many_categories()
@@ -193,5 +203,6 @@ def bad_gateway(e):
 @app.route('/about')
 def about():
     return render_template('about.html')
+
 
 
