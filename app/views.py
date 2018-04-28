@@ -67,7 +67,7 @@ def signup():
             User.add_user(username=form.username.data, \
                         password=form.password.data, \
                         email=form.email.data, \
-                        role=Role(roletitle='normal_user')) 
+                        role=Role(roletitle='admin')) 
 
             SessionManager.login_off(session)
             logger.info('User ' + form.username.data + ' signuped')
