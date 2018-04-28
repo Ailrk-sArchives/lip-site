@@ -67,11 +67,8 @@ def signup():
             User.add_user(username=form.username.data, \
                         password=form.password.data, \
                         email=form.email.data, \
-                        role=Role(roletitle='admin')) 
-            """
-            TODO:
-            create infecious admin authorize
-            """
+                        role=Role(roletitle='normal_user')) 
+
             SessionManager.login_off(session)
             logger.info('User ' + form.username.data + ' signuped')
             return redirect(url_for('login'))

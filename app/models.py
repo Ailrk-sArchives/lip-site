@@ -1,5 +1,5 @@
 from app import db
-import hashlib, markdown
+import hashlib, markdown2
 
 class User(db.Model):
     """
@@ -32,11 +32,12 @@ class User(db.Model):
         return User.query.all()
 
     @staticmethod
-    def add_user(username, password, email):
+    def add_user(username, password, email, role):
         user = User(username=username, \
                     password_hash= \
                     hashlib.sha512( str(password).encode('utf-8')).hexdigest(),\
-                    email=email)
+                    email=email,
+                    role=role)
         db.session.add(user)
         db.session.commit()
 
@@ -56,9 +57,15 @@ class User(db.Model):
         except BaseException:
             logger.error('id authorization error')
 
+    @staticmethod
+    def delete_user(user_id):
+        user = User.get_user(user_id)
+        if user: 
+            db.session.delete(user)
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
+
 
 class Article(db.Model):
     """
@@ -90,7 +97,7 @@ class Article(db.Model):
     @staticmethod
     def new_article(title, rawcontent, category,  author):
         article = Article(title=title, rawcontent=rawcontent, \
-                            content=markdown.markdown(rawcontent), \
+                            content=markdown2.markdown(rawcontent), \
                             category=category, author=author)
         db.session.add(article)
         db.session.commit()
@@ -101,13 +108,14 @@ class Article(db.Model):
         article = Article.query.get(article_id)
         article.title = title
         article.rawcontent = rawcontent
-        article.content = markdown.markdown(rawcontent) 
+        article.content = markdown2.markdown(rawcontent) 
         article.category = category
         db.session.commit()
         return article
 
     def __repr__(self):
         return '<Article {}  by {}>'.format(self.title, self.author)
+
 
 class Category(db.Model):
     """
@@ -132,6 +140,7 @@ class Category(db.Model):
         
     def __repr__(self):
         return '<Category {}>'.format(self.category) 
+
 
 class Role(db.Model):
     __tablename__ = 'roles'

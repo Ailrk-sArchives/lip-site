@@ -16,7 +16,6 @@ class SessionManager():
             session['logined'] = True
             user = User.get_user_by_name(username=username)
             
-            print (user.role)
             session['username'] = user.username
             session['roletitle'] = user.role.roletitle
         except TypeError:
