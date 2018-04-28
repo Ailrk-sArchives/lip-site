@@ -90,6 +90,7 @@ def show_article(article_id):
     article = Article.get_article(article_id)
     
     if not article: abort(404)
+
     return render_template('article.html', article=article)
 
 @app.route('/new', methods=['GET', 'POST'])
@@ -139,7 +140,7 @@ def edit(article_id):
     form = EditorForm()
     article = Article.get_article(article_id)
 
-    if not article: abort((404)
+    if not article: abort(404)
 
     if article.author != session['username']:
         flash('Only author can modify their own articles')
