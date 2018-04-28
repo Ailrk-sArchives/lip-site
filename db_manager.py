@@ -1,6 +1,7 @@
 from app import db
 from app.models import User, Article, Category
 import hashlib
+import markdown
 
 class Manager():
     def __init__(self):
@@ -11,7 +12,8 @@ class Manager():
 
         self.data_objects = {
             'category': lambda: self.category(),
-            'user': lambda: self.user()
+            'user': lambda: self.user(),
+            'article': lambda: self.article()
         }
 
     def run(self, instruction, data_object, args):
@@ -35,10 +37,19 @@ class Manager():
             password_hash=self.env['hashpass'](self.data_args[1]), \
             email=self.data_args[2])
 
+    def article(self):
+        return Article(title=self.data_args[0], \
+            rawcontent=self.data_args[1], \
+            content=markdown.markdown(self.data_args[1]), \
+            category=Category.get_category(self.data_args[2]), \
+            author=User.get_user_by_name(self.data_args[3]))
+
 manager = Manager()
 
 while True:
     tokens = input('> ').split(' ')
+    if len(tokens) == 0 or tokens[0] == '':
+        continue
     if tokens[0] == 'exit':
         break
     manager.run(tokens[0], tokens[1], tokens[2:])

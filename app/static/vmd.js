@@ -1,6 +1,6 @@
 // clickthorugh div for article cards
 $(".click-card").click(function () {
-  window.location = $(this).find("a").attr("href");
+  window.location = $(this).find(".show-article-page").attr("href");
   return false;
 });
 
