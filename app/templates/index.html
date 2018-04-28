@@ -23,13 +23,13 @@ Home
     <button class="close" data-dismiss="alert">&times;</button>
         {{ message }}
 </div>
-{% endfor%}
+{% endfor %}
 </div>
 
 <ul class="card-list">
   {% for article in articles%}
   <li>
-    <div class="card click-card" style="border-left-color: #ef5350; cursor: pointer;">
+      <div class="card click-card" style="border-left-color: {{article.category.color}}; cursor: pointer;">
       <div class="page-header">
         <h1>{{article.title}}</h1>
       </div>

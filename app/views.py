@@ -20,7 +20,6 @@ def index(category=None):
         articles = Article.get_many_articles()
     else:
         category = Category.query.filter_by(category=category).first()
-
         articles = Article.get_many_articles_by_category(article_cate=category)
 
     return render_template('index.html', articles=articles, session=session)
@@ -67,8 +66,12 @@ def signup():
         if user is None:
             User.add_user(username=form.username.data, \
                         password=form.password.data, \
-                        email=form.email.data) 
-
+                        email=form.email.data, \
+                        role=Role(roletitle='admin')) 
+            """
+            TODO:
+            create infecious admin authorize
+            """
             SessionManager.login_off(session)
             logger.info('User ' + form.username.data + ' signuped')
             return redirect(url_for('login'))

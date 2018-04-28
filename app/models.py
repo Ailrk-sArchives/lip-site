@@ -116,6 +116,7 @@ class Category(db.Model):
     __tablename__ = 'categories'
     id = db.Column(db.Integer, primary_key=True)
     category = db.Column(db.String(64), unique=True)
+    color = db.Column(db.String(64), unique=True)
 
     # one category to many articles
     articles = db.relationship('Article', backref='category')
@@ -127,6 +128,7 @@ class Category(db.Model):
     @staticmethod
     def get_category(category):
         return Category.query.filter_by(category=category).first()
+    
         
     def __repr__(self):
         return '<Category {}>'.format(self.category) 
