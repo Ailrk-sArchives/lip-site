@@ -83,7 +83,7 @@ Editor
 
     <div class="dropdown-menu filters-menu editor-filters-menu" aria-labelledby="dropdownMenuLink">
       <ul class="list-unstyled components">
-        {% for cate in categories %}
+        {% for cate in create_categories_list()%}
         <li class="filter-item">
             <a class="editor-cate-drop">{{ cate.category }}</a>
         </li>

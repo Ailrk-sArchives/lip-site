@@ -1,4 +1,4 @@
-from flask import  Flask
+from flask import  Flask, g
 from .config import Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_bootstrap import Bootstrap
@@ -10,3 +10,4 @@ db = SQLAlchemy(app)
 bootstrap = Bootstrap(app)
 
 from app import views, models
+

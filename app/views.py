@@ -1,16 +1,27 @@
 from app import app, db
-from flask import render_template, session, redirect, url_for, flash 
+from flask import render_template, session, redirect, url_for, flash
 from .forms import LoginForm, SignupForm, EditorForm
 from .models import *
 from .utils import SessionManager, logger
 
+# context processors
+@app.context_processor
+def inject_categories():
+    def create_categories_list():
+        return Category.get_many_categories()
+    return dict(create_categories_list=create_categories_list)
 
-
-
+# routing
 @app.route('/index', methods=['GET', 'POST'])
 @app.route('/', methods=['GET', 'POST'])
-def index(): 
-    articles = Article.get_many_articles()
+@app.route('/<category>', methods=['GET', 'POST'])
+def index(category=None): 
+    if not category:
+        articles = Article.get_many_articles()
+    else:
+        category = Category.query.filter_by(category=category).first()
+
+        articles = Article.get_many_articles_by_category(article_cate=category)
 
     return render_template('index.html', articles=articles, session=session)
 
@@ -84,7 +95,6 @@ def new():
     """
     form = EditorForm()
     categories = Category.get_many_categories()
-
     if session['logined'] and session['username']:
 
         # admin check. only admin can create article
@@ -183,3 +193,5 @@ def bad_gateway(e):
 @app.route('/about')
 def about():
     return render_template('about.html')
+
+

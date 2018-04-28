@@ -77,11 +77,15 @@ class Article(db.Model):
 
     @staticmethod
     def get_many_articles():
-        return Article.query.all()
+        return Article.query.order_by(Article.id.desc())
 
     @staticmethod
     def get_article(article_id):
         return Article.query.get(article_id)
+
+    @staticmethod
+    def get_many_articles_by_category(article_cate):
+        return Article.query.filter_by(category=article_cate).order_by(Article.id.desc())
 
     @staticmethod
     def new_article(title, rawcontent, category,  author):

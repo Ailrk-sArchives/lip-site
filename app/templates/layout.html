@@ -246,19 +246,11 @@
             </button>
             <div class="dropdown-menu filters-menu" aria-labelledby="dropdownMenuButton">
               <ul class="list-unstyled components">
+                {% for cate in create_categories_list()%}
                 <li class="filter-item">
-                  <a href="#">Cantonese</a>
+                    <a href="{{url_for('index', category=cate.category)}}">{{cate.category}}</a>
                 </li>
-
-                <li class="filter-item">
-                  <a href="#">Shanghainese</a>
-                </li>
-                <li class="filter-item">
-                  <a href="#">¯\_(ツ)_/¯</a>
-                </li>
-                <li class="filter-item">
-                  <a href="#">¯\_(ツ)_/¯</a>
-                </li>
+                {%endfor%}
               </ul>
             </div>
           </div>
