@@ -1,6 +1,12 @@
 from app import db
 import hashlib, markdown2
 
+""" many to many relationship for user-likedarticles relationship"""
+liked_articles  = db.Table('liked_articles', db.Model.metadata,
+        db.Column('user_id', db.Integer, db.ForeignKey('users.id'), primary_key=True),
+        db.Column('article_id', db.Integer, db.ForeignKey('articles.id'), primary_key=True)
+        )
+
 class User(db.Model):
     """
     User entries
@@ -13,6 +19,9 @@ class User(db.Model):
     
     # author's forign key
     articles = db.relationship('Article', backref='author', lazy=True)
+    # liked articles <many-to-many relationship>
+    likedarticles = db.relationship('Article', secondary=liked_articles,
+            lazy='subquery', backref=db.backref('likedusers', lazy=True))
 
     # role_id
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
@@ -33,7 +42,7 @@ class User(db.Model):
 
     @staticmethod
     def add_user(username, password, email, role):
-        user = User(username=username, \
+        user = User(username=username, 
                     password_hash= \
                     hashlib.sha512( str(password).encode('utf-8')).hexdigest(),\
                     email=email,
@@ -49,10 +58,13 @@ class User(db.Model):
 
         db.session.commit()
 
+    def self_id(self):
+        return self.id
+
     @staticmethod
     def authorize_by_id(user_id, role):
         try:
-            user = User.query.get(user_id)
+            user = User.get_user(user_id)
             user.role = role
         except BaseException:
             logger.error('id authorization error')
@@ -62,6 +74,31 @@ class User(db.Model):
         user = User.get_user(user_id)
         if user: 
             db.session.delete(user)
+            db.session.commit()
+
+    @staticmethod
+    def get_many_user_articles(user_id):
+        user = User.get_user(user_id)
+        if user:
+            return user.articles
+
+    def like_article(self, article):
+        if article:
+            self.likedarticles.append(article)
+            db.session.commit()
+        
+    @staticmethod
+    def get_many_liked_articles(user_id):
+        user = User.get_user(user_id)
+        if user:
+            return user.likedarticles
+
+    @staticmethod
+    def get_many_liked_articles_by_category(user_id, category):
+        user = User.get_user(user_id)
+        if user:
+            return Article.query.filter_by(likeduser=user, \
+                    category=category.category)
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
@@ -137,7 +174,6 @@ class Category(db.Model):
     def get_category(category):
         return Category.query.filter_by(category=category).first()
     
-        
     def __repr__(self):
         return '<Category {}>'.format(self.category) 
 

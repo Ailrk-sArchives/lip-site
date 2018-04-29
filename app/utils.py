@@ -13,10 +13,9 @@ class SessionManager():
     @staticmethod
     def login_on(session, username):
         try:
-            session['logined'] = True
             user = User.get_user_by_name(username=username)
-            
-            session['username'] = user.username
+            session['logined'] = True
+            session['username'] = username
             session['roletitle'] = user.role.roletitle
         except TypeError:
             logger.error('Session Error: unable to change login status')        
@@ -25,7 +24,7 @@ class SessionManager():
     def login_off(session):
         try:
             session['logined'] = False
-            session['username'] = None
+            session['user'] = None
             session['roletitle'] = None
         except TypeError:
             logger.error('Session Error: unable to change login status')        

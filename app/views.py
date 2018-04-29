@@ -11,6 +11,12 @@ def inject_categories():
         return Category.get_many_categories()
     return dict(create_categories_list=create_categories_list)
 
+@app.context_processor
+def inject_user():
+    def get_current_user():
+        return User.get_user_by_name(username=session['username'])
+    return dict(get_current_user=get_current_user)
+
 # routing
 @app.route('/index', methods=['GET', 'POST'])
 @app.route('/', methods=['GET', 'POST'])
@@ -23,7 +29,6 @@ def index(category=None):
         category = Category.query.filter_by(category=category).first()
         if not category: abort(404)
         articles = Article.get_many_articles_by_category(article_cate=category)
-    
     return render_template('index.html', articles=articles, session=session)
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -178,12 +183,22 @@ def edit(article_id):
 
 @app.route('/profile')
 def profile():
-    return render_template('profile.html')
+    if session['username'] and session['logined']:
+        return render_template('profile.html')
+    else:
+        flash('please login before access profile')
+        return redirect(url_for('index'))
 
 @app.route('/logout')
 def logout():
     SessionManager.login_off(session)
     return redirect(url_for('index'))
+
+@app.route('/like/<int:article_id>')
+def like(article_id):
+    user = User.get_user_by_name(username=session['username'])
+    user.like_article(Article.get_article(article_id))
+    return redirect(url_for('show_article', article_id=article_id))
 
 @app.errorhandler(404)
 def page_not_found(e):
