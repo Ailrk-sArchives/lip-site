@@ -182,9 +182,16 @@ def edit(article_id):
     return render_template('editor.html', form=form, categories=categories)
 
 @app.route('/profile')
-def profile():
+@app.route('/profile/<display>')
+def profile(display=None):
     if session['username'] and session['logined']:
-        return render_template('profile.html')
+        if display == 'liked_articles':
+            return render_template('profile.html', display='liked_articles')
+        elif display == 'created_articles':
+            return render_template('profile.html', display='created_articles')
+        else:
+            return render_template('profile.html')
+
     else:
         flash('please login before access profile')
         return redirect(url_for('index'))

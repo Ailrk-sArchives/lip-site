@@ -26,6 +26,7 @@ class User(db.Model):
     # role_id
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
 
+    """ static filed"""
     @staticmethod
     def get_user(user_id):
         return User.query.get(user_id)
@@ -50,17 +51,6 @@ class User(db.Model):
         db.session.add(user)
         db.session.commit()
 
-    def authorize(self, role):
-        try:
-            self.role = role
-        except BaseException:
-            logger.error('autorizaztion error')
-
-        db.session.commit()
-
-    def self_id(self):
-        return self.id
-
     @staticmethod
     def authorize_by_id(user_id, role):
         try:
@@ -82,11 +72,6 @@ class User(db.Model):
         if user:
             return user.articles
 
-    def like_article(self, article):
-        if article:
-            self.likedarticles.append(article)
-            db.session.commit()
-        
     @staticmethod
     def get_many_liked_articles(user_id):
         user = User.get_user(user_id)
@@ -99,6 +84,23 @@ class User(db.Model):
         if user:
             return Article.query.filter_by(likeduser=user, \
                     category=category.category)
+
+    """ non static field """
+    def self_id(self):
+        return self.id
+
+    def authorize(self, role):
+        try:
+            self.role = role
+        except BaseException:
+            logger.error('autorizaztion error')
+
+        db.session.commit()
+
+    def like_article(self, article):
+        if article:
+            self.likedarticles.append(article)
+            db.session.commit()
 
     def __repr__(self):
         return '<User {}>'.format(self.username)

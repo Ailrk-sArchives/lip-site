@@ -1,7 +1,7 @@
 from app import db
 from app.models import User, Article, Category
 import hashlib
-import markdown
+import markdown2
 
 class Manager():
     def __init__(self):
@@ -68,7 +68,7 @@ class Manager():
     def new_article(self):
         return Article(title=self.data_args[0], \
             rawcontent=self.data_args[1], \
-            content=markdown.markdown(self.data_args[1]), \
+            content=markdown2.markdown2(self.data_args[1]), \
             category=Category.get_category(self.data_args[2]), \
             author=User.get_user_by_name(self.data_args[3]))
 
