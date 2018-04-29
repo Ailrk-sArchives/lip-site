@@ -18,7 +18,7 @@
       <h1>{{session['username']}}</h1>
     </div>
     {% if session['roletitle'] == 'admin' %}
-    <a class="btn btn-default" href="{{url_for('new')}}">New Article</a>
+      <a class="btn btn-default" href="{{url_for('new')}}">New Article</a>
     {% endif %}
     <a class="btn btn-primary" href="{{url_for('logout')}}">Logout</a>
   </div>
