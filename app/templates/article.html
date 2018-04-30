@@ -23,8 +23,8 @@
       <p id="author">by {{article.author.username}}</p>
       {% if session['username'] == article.author.username %}
       <a id="edit-article" href="{{url_for('edit', article_id=article.id)}}">edit</a>
-      {% endif %}
       <a href="{{url_for('like', article_id=article.id)}}">like</a>
+      {% endif %}
     </div>
     <p class="article-text">{{article.content|safe}}</p>
   </div>

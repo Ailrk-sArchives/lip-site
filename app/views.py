@@ -147,7 +147,7 @@ def edit(article_id):
 
     if not article: abort(404)
 
-    if article.author != session['username']:
+    if article.author.username != session['username']:
         flash('Only author can modify their own articles')
         return redirect(url_for('index'))
 
@@ -203,9 +203,13 @@ def logout():
 
 @app.route('/like/<int:article_id>')
 def like(article_id):
-    user = User.get_user_by_name(username=session['username'])
-    user.like_article(Article.get_article(article_id))
-    return redirect(url_for('show_article', article_id=article_id))
+    if session['username'] and session['logined']:
+        user = User.get_user_by_name(username=session['username'])
+        user.like_article(Article.get_article(article_id))
+        return redirect(url_for('show_article', article_id=article_id))
+    else:
+        flash('please login')
+        return redirect(url_for('index'))
 
 @app.errorhandler(404)
 def page_not_found(e):
@@ -226,6 +230,3 @@ def bad_gateway(e):
 @app.route('/about')
 def about():
     return render_template('about.html')
-
-
-
