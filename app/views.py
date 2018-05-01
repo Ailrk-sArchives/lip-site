@@ -12,10 +12,17 @@ def inject_categories():
     return dict(create_categories_list=create_categories_list)
 
 @app.context_processor
-def inject_user():
+def inject_current_user():
     def get_current_user():
         return User.get_user_by_name(username=session['username'])
     return dict(get_current_user=get_current_user)
+
+@app.context_processor
+def inject_user():
+    def get_user(username):
+        return User.get_user_by_name(username=username)
+    return dict(get_user=get_user)
+
 
 # routing
 @app.route('/index', methods=['GET', 'POST'])
@@ -183,18 +190,44 @@ def edit(article_id):
 
 @app.route('/profile')
 @app.route('/profile/<display>')
-def profile(display=None):
-    if session['username'] and session['logined']:
-        if display == 'liked_articles':
-            return render_template('profile.html', display='liked_articles')
-        elif display == 'created_articles':
-            return render_template('profile.html', display='created_articles')
-        else:
-            return render_template('profile.html')
+@app.route('/profile/user/<other_username>')
+@app.route('/profile/user/<other_username>/<display>')
+def profile(other_username=None, display=None):
 
-    else:
+    if session['username'] and session['logined']:
+        # check if it is routing to other people's page or user's own profile
+        if other_username == None:
+            if display == 'liked_articles':
+                return render_template('profile.html',other_username=None,\
+                        display='liked_articles')
+
+            elif display == 'created_articles':
+                return render_template('profile.html',other_username=None, \
+                        display='created_articles')
+
+        else:
+            if display == 'liked_articles':
+                return render_template('profile.html',other_username=other_username,\
+                        display='liked_articles')
+
+            elif display == 'created_articles':
+                return render_template('profile.html',other_username=other_username, \
+                        display='created_articles')
+
+            else:
+                return render_template('profile.html',other_username=other_username, \
+                        display='created_articles')
+
+
+    # if Unlogined user try to access his own personal profile
+    elif not other_username:
         flash('please login before access profile')
         return redirect(url_for('index'))
+    else:
+        return render_template('profile.html',other_username=other_username,\
+                display='created_articles')
+
+    return render_template('profile.html', other_username=None, display='created_articles')
 
 @app.route('/logout')
 def logout():

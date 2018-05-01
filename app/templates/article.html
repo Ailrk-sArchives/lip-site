@@ -20,11 +20,13 @@
     <div class="page-header">
       <h1>{{article.title}}</h1>
       <br/>
-      <p id="author">by {{article.author.username}}</p>
+      <a href="{{ url_for('profile', other_username=(article.author.username if article.author.username != session['username'] else session['username'])) }}">
+          <p id="author">by {{article.author.username}}</p>
+      </a>
       {% if session['username'] == article.author.username %}
       <a id="edit-article" href="{{url_for('edit', article_id=article.id)}}">edit</a>
-      <a href="{{url_for('like', article_id=article.id)}}">like</a>
       {% endif %}
+      <a href="{{url_for('like', article_id=article.id)}}">like</a>
     </div>
     <p class="article-text">{{article.content|safe}}</p>
   </div>

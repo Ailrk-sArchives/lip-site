@@ -37,7 +37,7 @@ Home
       <div class="page-header">
         <h1>{{article.title}}</h1>
         <br/>
-        <p id="author">by {{article.author.username}}</p>
+        <p id="author">by  {{article.author.username}}</p>
       </div>
       <p class="article-text">{{article.content | safe }}</p>
       <a class="show-article-page" href="{{ url_for('show_article', article_id=article.id) }}"></a>

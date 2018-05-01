@@ -15,20 +15,34 @@
 <div class="profile-container">
   <div class="card">
     <div class="page-header">
-      <h1>{{session.username}}</h1>
+        <h1>{{ session['username'] if not other_username else other_username }}</h1>
     </div>
-    {% if session['roletitle'] == 'admin' %}
-      <a class="btn btn-default" href="{{url_for('new')}}">New Article</a>
-        <a class="btn btn-primary" href="{{url_for('profile', display='created_articles')}}">Article</a>
-    {% endif %}
+  <!--if logined, check if the url contains other_username or not-->
+  {% if session['logined'] %} 
+    {% if other_username %}
+          <a class="btn btn-default" href="{{url_for('profile', other_username=other_username,  display='liked_articles')}}">Liked</a>
+          <a class="btn btn-primary" href="{{url_for('profile', other_username=other_username,display='created_articles')}}">Article</a>
+    {%else%}
+        {% if session['roletitle'] == 'admin' %}
+          <a class="btn btn-default" href="{{url_for('new')}}">New Article</a>
+        {% endif %}
+          <a class="btn btn-primary" href="{{url_for('profile', display='created_articles')}}">Article</a>
+          <a class="btn btn-default" href="{{url_for('profile', display='liked_articles')}}">Liked</a>
+          <a class="btn btn-primary" href="{{url_for('logout')}}">Logout</a>
+      </div>
+    {%endif%}
+  {% else %}
+      <a class="btn btn-primary" href="{{url_for('profile', display='created_articles')}}">Article</a>
       <a class="btn btn-default" href="{{url_for('profile', display='liked_articles')}}">Liked</a>
-    <a class="btn btn-primary" href="{{url_for('logout')}}">Logout</a>
-  </div>
+  {% endif%}
+ 
+</div>
+  
 
   {% if display == 'liked_articles'%}
   <div class="liked-articles">
     <ul class="card-list">
-      {% for article in get_current_user().likedarticles%}
+      {% for article in (get_user(username=other_username).likedarticles if other_username else get_current_user().likedarticles) %}
       <li>
         <div class="card click-card" style="border-left-color: {{article.category.color}}; cursor: pointer;">
           <div class="page-header">
@@ -47,7 +61,7 @@
   {% else %}
   <div class="created-articles">
     <ul class="card-list">
-      {% for article in get_current_user().articles%}
+      {% for article in (get_user(username=other_username).articles if other_username else get_current_user().articles) %}
       <li>
         <div class="card click-card" style="border-left-color: {{article.category.color}}; cursor: pointer;">
           <div class="page-header">
@@ -63,5 +77,6 @@
     </ul>
   </div>
   {% endif %}
-</div>
+
+  
 {% endblock %}
