@@ -3,6 +3,7 @@ from app.models import User, Article, Category
 import hashlib
 import markdown2
 
+
 class Manager():
     def __init__(self):
         self.env = {
@@ -61,16 +62,17 @@ class Manager():
         return Category(category=self.data_args[0])
 
     def new_user(self):
-        return User(username=self.data_args[0], \
-            password_hash=self.env['hashpass'](self.data_args[1]), \
-            email=self.data_args[2])
+        return User(username=self.data_args[0],
+                    password_hash=self.env['hashpass'](self.data_args[1]),
+                    email=self.data_args[2])
 
     def new_article(self):
-        return Article(title=self.data_args[0], \
-            rawcontent=self.data_args[1], \
-            content=markdown2.markdown2(self.data_args[1]), \
-            category=Category.get_category(self.data_args[2]), \
-            author=User.get_user_by_name(self.data_args[3]))
+        return Article(title=self.data_args[0],
+                       rawcontent=self.data_args[1],
+                       content=markdown2.markdown2(self.data_args[1]),
+                       category=Category.get_category(self.data_args[2]),
+                       author=User.get_user_by_name(self.data_args[3]))
+
 
 manager = Manager()
 

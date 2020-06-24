@@ -8,8 +8,9 @@ logger, SeesionManager
 logging.basicConfig(filename='log.log', level=logging.DEBUG)
 logger = logging.getLogger('root-logger')
 
+
 class SessionManager():
-    
+
     @staticmethod
     def login_on(session, username):
         try:
@@ -18,7 +19,7 @@ class SessionManager():
             session['username'] = username
             session['roletitle'] = user.role.roletitle
         except TypeError:
-            logger.error('Session Error: unable to change login status')        
+            logger.error('Session Error: unable to change login status')
 
     @staticmethod
     def login_off(session):
@@ -27,4 +28,4 @@ class SessionManager():
             session['user'] = None
             session['roletitle'] = None
         except TypeError:
-            logger.error('Session Error: unable to change login status')        
+            logger.error('Session Error: unable to change login status')

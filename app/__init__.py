@@ -10,7 +10,6 @@ app.config.from_object(Config)
 
 manager = Manager(app)
 db = SQLAlchemy(app)
-
 migrate = Migrate(app, db)
 bootstrap = Bootstrap(app)
 
